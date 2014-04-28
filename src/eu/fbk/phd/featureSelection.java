@@ -35,7 +35,7 @@ public class featureSelection {
 
 			deactiveFeatures(active);
 		}
-
+		adjustMatrixes();
 		if (metric.equalsIgnoreCase("avg")) {
 			Hashtable<Integer, Double> avg = avg();
 			// System.out.println("**AVG**");
@@ -56,6 +56,20 @@ public class featureSelection {
 			outputFile(outputFile, sortedMapAsc);
 		}
 
+	}
+
+	private static void adjustMatrixes() {
+		//TODO all the other features should be zeros
+		for(row r :trainingF){
+			
+			for(Entry<Integer, Integer> f: featues.entrySet()){
+				if(!r.values.containsKey(f.getKey())){
+					r.values.put(f.getKey(), 0);
+				}
+				
+			}
+		}
+		
 	}
 
 	private static void deactiveFeatures(String active) {
@@ -153,11 +167,20 @@ public class featureSelection {
 						/ ((N11 + N01) * (N11 + N10) * (N10 + N00) * (N01 + N00));
 
 				previousScore = selectedFeatures.get(feature);
-				if (previousScore == null || chisquareScore > previousScore) {
+				
+				double in=0.0;
+				if(previousScore != null){
+					chisquareScore+=previousScore;
+				}
+				if (!Double.isNaN(chisquareScore)){
+					in+=chisquareScore;
+				}
+				selectedFeatures.put(feature, in);
+				/*if (previousScore == null || chisquareScore > previousScore) {
 					if (Double.isNaN(chisquareScore))
 						chisquareScore = 0.0;
 					selectedFeatures.put(feature, chisquareScore);
-				}
+				}*/
 
 			}
 		}
@@ -217,13 +240,15 @@ public class featureSelection {
 
 					double mi = Math.log10(((float) pxy / (px * py)));
 					double score = mi;
-					
+					if(!Double.isInfinite(mi)){
 					if (results.containsKey(ff.getKey())) {
 						score += results.get(ff.getKey());
+						results.put(ff.getKey(), score);
 					} else {
 						results.put(ff.getKey(), score);
 					}
 					resultsHH.put(r.id, "");
+					}
 				}
 
 			}
