@@ -238,8 +238,8 @@ public class featureSelection {
 							ff.getKey())
 							/ trainingF.size();
 
-					double mi = Math.log10(((float) pxy / (px * py)));
-					double score = mi;
+					double mi = Math.log(((float) pxy / (px * py)));
+					double score = ((float)mi/Math.log(2));
 					if(!Double.isInfinite(mi)){
 					if (results.containsKey(ff.getKey())) {
 						score += results.get(ff.getKey());
