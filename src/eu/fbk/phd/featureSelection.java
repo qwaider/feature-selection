@@ -234,7 +234,7 @@ public class featureSelection {
 	private static int countLabelWithNotFeatureX(String id, Integer featurekey) {
 		int sum = 0;
 		for (row r : trainingF) {
-			if (r.id.equals(id) && r.values.get(featurekey) == 0)
+			if (r.id.equals(id) &&r.values.containsKey(featurekey)&& r.values.get(featurekey) == 0)
 				sum += 1;
 		}
 		return sum;
@@ -243,7 +243,7 @@ public class featureSelection {
 	private static int countLabelWithFeatureX(String id, Integer featurekey) {
 		int sum = 0;
 		for (row r : trainingF) {
-			if (r.id.equals(id) && r.values.get(featurekey) == 1)
+			if (r.id.equals(id) && r.values.containsKey(featurekey)&&r.values.get(featurekey) == 1)
 				sum += 1;
 		}
 		return sum;
